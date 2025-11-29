@@ -13,12 +13,13 @@ migrate = Migrate(app, db)
 
 
 from models import Note
+#/ start of endpoint get welcome  message
 
 @app.route('/', methods=['GET'])
 def index():
     return("Welcome to jotify")
 
-
+#/ start of endpoint to retrieve or add a new note
 @app.route('/api/notes', methods=['POST'])
 def add_note():
     data = request.get_json()
@@ -28,15 +29,14 @@ def add_note():
     db.session.commit()
     return jsonify(new_note.to_dict()), 201
 
-
-
+#/start of endpoint to get all note
 @app.route('/api/notes', methods=['GET'])
 def get_notes():
     all_note = Note.query.all()
     return jsonify([note.to_dict() for note in all_note]), 200
 
-#/start of a new endpoint
 
+#/start of  new endpoint to get note based on id
 @app.route('/api/notes/<int:id>', methods=['GET'])
 def get_note(id):
     note = Note.query.get(id)
@@ -45,7 +45,8 @@ def get_note(id):
     return jsonify(note.to_dict()), 200
 #/end of endpoint
 
-#/start pointupdatenote
+
+#/start pointupdatenote to update note based on id
 @app.route('/api/notes/<int:id>', methods=['PUT'])
 def update_note(id):
     data = request.get_json()
@@ -61,7 +62,7 @@ def update_note(id):
 #/end of update note
 
 
-#/endpoint delete note
+#/endpoint delete  all note 
 
 @app.route('/api/notes/<int:id>', methods=['DELETE'])
 def delete_note(id):
@@ -76,7 +77,7 @@ def delete_note(id):
 
 
 
-#/start point of delete all note
+#/start point of delete a note
 @app.route('/api/notes', methods=['DELETE'])
 def delete_notes():
     db.session.query(Note).delete()
@@ -84,7 +85,7 @@ def delete_notes():
     return jsonify({"message": "notes deleted successfully"})
 #/endpoint of delete all note
 
-#/start of a new endpoint of search note
+#/start of a new endpoint to search note based on title
 @app.route('/api/notes/search', methods=['GET'])
 def search_notes():
     search = request.args.get('title'.lower())
